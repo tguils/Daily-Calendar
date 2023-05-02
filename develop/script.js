@@ -2,6 +2,7 @@
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
+$(document).ready(function() {
 
 setInterval(function runningTime() {
   $('#currentDay').text(dayjs().format("MMM DD, YYYY hh:mm:ss"));
@@ -9,13 +10,12 @@ setInterval(function runningTime() {
 
 var text = $(".description").val();
 
-$("#saveButton").on("click", function(event) {
-  event.preventDefault();
+$(".saveBtn").on("click", function() {
   console.log("saving");
-  
-  addEventToCalander(text)
-  text.push(text);
-  localStorage.setItem("text", JSON.stringify(text))
+  var value = $(this).siblings(".description").val();
+  var hour = $(this).parent().attr("id");
+  console.log(value);
+  localStorage.setItem(hour, value)
   // $(".description").append($("<p>").text(text))
 })
 
@@ -25,18 +25,14 @@ function addEventToCalander(text) {
   $(".description").append($("<p>").text(text)) || [];
 }
 
-text.forEach(function(text) {
-  addEventToCalander(text);
-})
 
-var timeBlock = $(".time-block");
-var timeNow = moment().hour();
-function timeTrack() {
-  
+//need to set up .time-block to link up with actual time
+
+var timeNow = dayjs().hour(); 
+$(".time-block").each(function() {
+const timeBlock = parseInt($(this).attr("id").split("-")[1])
   if (timeBlock === timeNow) {
     $(this).addClass('present');
-    $(this).removeClass('past');
-    $(this).removeClass('future');
   }
   else if (timeBlock < timeNow) {
     $(this).addClass('past');
@@ -49,9 +45,18 @@ function timeTrack() {
     $(this).removeClass('past');
   }
 
-}
+});
+//need to fix color classes
 
+$("#hour-9 .description").val(localStorage.getItem("hour-9"));
+$("#hour-10 .description").val(localStorage.getItem("hour-10"));
+$("#hour-11 .description").val(localStorage.getItem("hour-11"));
+$("#hour-12 .description").val(localStorage.getItem("hour-12"));
+$("#hour-13 .description").val(localStorage.getItem("hour-13"));
+$("#hour-14 .description").val(localStorage.getItem("hour-14"));
+$("#hour-15 .description").val(localStorage.getItem("hour-15"));
 
+})
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
   // local storage. HINT: What does `this` reference in the click listener
