@@ -1,125 +1,62 @@
-dayjs.extend(window.dayjs_plugin_advancedFormat);
+// dayjs.extend(window.dayjs_plugin_advancedFormat);
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
-var day = [
-  {
-    id: "0",
-    hour: "09",
-    time: "09",
-    meridiem: "am",
-    reminder: ""
-  },
-  {
-    id: "0",
-    hour: "09",
-    time: "09",
-    meridiem: "am",
-    reminder: ""
-  },
-  {
-    id: "0",
-    hour: "09",
-    time: "09",
-    meridiem: "am",
-    reminder: ""
-  },
-  {
-    id: "0",
-    hour: "09",
-    time: "09",
-    meridiem: "am",
-    reminder: ""
-  },
-  {
-    id: "0",
-    hour: "09",
-    time: "09",
-    meridiem: "am",
-    reminder: ""
-  },
-  {
-    id: "0",
-    hour: "09",
-    time: "09",
-    meridiem: "am",
-    reminder: ""
-  },
-  {
-    id: "1",
-    hour: "10",
-    time: "10",
-    meridiem: "am",
-    reminder: ""
-  },
-  {
-    id: "2",
-    hour: "11",
-    time: "11",
-    meridiem: "am",
-    reminder: ""
-  },
-  {
-    id: "3",
-    hour: "12",
-    time: "12",
-    meridiem: "pm",
-    reminder: ""
-  },
-  {
-    id: "4",
-    hour: "01",
-    time: "01",
-    meridiem: "pm",
-    reminder: ""
-  },
-  {
-    id: "5",
-    hour: "02",
-    time: "02",
-    meridiem: "pm",
-    reminder: ""
-  },
-  {
-    id: "6",
-    hour: "03",
-    time: "03",
-    meridiem: "pm",
-    reminder: ""
-  },
-  {
-    id: "7",
-    hour: "04",
-    time: "04",
-    meridiem: "pm",
-    reminder: ""
-  },
-  {
-    id: "8",
-    hour: "05",
-    time: "05",
-    meridiem: "pm",
-    reminder: ""
-  },
-  {
-    id: "9",
-    hour: "06",
-    time: "06",
-    meridiem: "pm",
-    reminder: ""
-  },
-]
+$(document).ready(function() {
 
-function runningTime() {
-  var currentDay = dayjs().format('ddd | MMM | YYYY');
-  $('#currentDay').text(currentDay);
+setInterval(function runningTime() {
+  $('#currentDay').text(dayjs().format("MMM DD, YYYY hh:mm:ss"));
+}, 1000);
+
+var text = $(".description").val();
+
+$(".saveBtn").on("click", function() {
+  console.log("saving");
+  var value = $(this).siblings(".description").val();
+  var hour = $(this).parent().attr("id");
+  console.log(value);
+  localStorage.setItem(hour, value)
+  // $(".description").append($("<p>").text(text))
+})
+
+var events = JSON.parse(localStorage.getItem("text"))
+
+function addEventToCalander(text) {
+  $(".description").append($("<p>").text(text)) || [];
 }
 
-function saveMeetings() {
-  localStorage.setitem("day", JSON.stringify(day));
-}
 
-}
+//need to set up .time-block to link up with actual time
+
+var timeNow = dayjs().hour(); 
+$(".time-block").each(function() {
+const timeBlock = parseInt($(this).attr("id").split("-")[1])
+  if (timeBlock === timeNow) {
+    $(this).addClass('present');
+  }
+  else if (timeBlock < timeNow) {
+    $(this).addClass('past');
+    $(this).removeClass('present');
+    $(this).removeClass('future');
+  }
+  else {
+    $(this).addClass('future');
+    $(this).removeClass('present');
+    $(this).removeClass('past');
+  }
+
+});
+//need to fix color classes
+
+$("#hour-9 .description").val(localStorage.getItem("hour-9"));
+$("#hour-10 .description").val(localStorage.getItem("hour-10"));
+$("#hour-11 .description").val(localStorage.getItem("hour-11"));
+$("#hour-12 .description").val(localStorage.getItem("hour-12"));
+$("#hour-13 .description").val(localStorage.getItem("hour-13"));
+$("#hour-14 .description").val(localStorage.getItem("hour-14"));
+$("#hour-15 .description").val(localStorage.getItem("hour-15"));
+
+})
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
   // local storage. HINT: What does `this` reference in the click listener
@@ -138,4 +75,4 @@ function saveMeetings() {
   // attribute of each time-block be used to do this?
   //
   // TODO: Add code to display the current date in the header of the page.
-});
+
