@@ -11,5 +11,5 @@ When you enter the application the user is presented with the current time and d
 ![Alt text](/images/screenshot1.png)
 ![Alt text](/images/screenshot2.png)
 
-[Github Test URL]()
+[Github Test URL](https://tguils.github.io/Daily-Calendar/)
 
